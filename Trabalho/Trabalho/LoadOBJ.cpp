@@ -6,11 +6,6 @@ void Load(string filename, vector<glm::vec3> &positions, vector<glm::vec2> &text
 
 	if (file != NULL)
 	{
-		vector<glm::vec3> positions;
-		vector<glm::vec2> texturecoordinates;
-		vector<glm::vec3> normals;
-		vector<unsigned int> positionIndices, textureCoordsIndices, normalIndices;
-
 		while (true)
 		{
 			char firstWord[64];
