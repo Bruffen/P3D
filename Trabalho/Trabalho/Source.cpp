@@ -21,6 +21,7 @@
 #define WIDTH 1280
 #define HEIGHT 720
 
+GLuint VAO, Buffers[3];
 glm::mat4 Model, View, Projection;
 
 void start(void);
@@ -71,10 +72,28 @@ void start(void)
 		glm::vec3(0.0f, 1.0f, 0.0f)		// normal
 	);
 
+	//criar os arrays para guardar informação dentro da função load
 	vector<glm::vec3> positions;
 	vector<glm::vec2> texturecoordinates;
 	vector<glm::vec3> normals;
 	vector<unsigned int> positionIndices, textureCoordsIndices, normalIndices;
-
+	//load do ficheiro obj para as variáveis
 	Load("Iron_Man/Iron_Man.obj", positions, texturecoordinates, normals, positionIndices, textureCoordsIndices, normalIndices);
+
+	//criar nome de VAO e vincular
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	//criar nomes de VBOs
+	glGenBuffers(3, Buffers);
+
+	//primeiro VBO com as posicoes
+	glBindBuffer(GL_ARRAY_BUFFER, Buffers[0]);
+	glBufferStorage(GL_ARRAY_BUFFER, sizeof(positions), &positions[0], 0);
+	//segundoVBO com as coordenadas de textura
+	glBindBuffer(GL_ARRAY_BUFFER, Buffers[1]);
+	glBufferStorage(GL_ARRAY_BUFFER, sizeof(texturecoordinates), &texturecoordinates[0], 0);
+	//terceiro VBO com as normais
+	glBindBuffer(GL_ARRAY_BUFFER, Buffers[2]);
+	glBufferStorage(GL_ARRAY_BUFFER, sizeof(normals), &normals[0], 0);
 }
