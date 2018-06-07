@@ -46,6 +46,7 @@ void Load(string filename)
 					&positionIndices[i + 0], &textureCoordsIndices[i + 0], &normalIndices[i + 0],	//primeiro vertice da face
 					&positionIndices[i + 1], &textureCoordsIndices[i + 1], &normalIndices[i + 1],	//segundo vertice da face
 					&positionIndices[i + 2], &textureCoordsIndices[i + 2], &normalIndices[i + 2]);	//terceiro vertice da face
+				i += 3;
 			}
 		}
 	}
