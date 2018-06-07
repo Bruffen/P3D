@@ -111,9 +111,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="LoadOBJ.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="LoadOBJ.h" />
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
