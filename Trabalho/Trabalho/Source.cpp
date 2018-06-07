@@ -42,7 +42,6 @@ int main(void)
 	glewExperimental = GL_TRUE;
 	glewInit();
 	start();
-	Load("Iron_Man/Iron_Man.obj");
 
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -71,4 +70,11 @@ void start(void)
 		glm::vec3(0.0f, 0.0f, 0.0f),	// lookat
 		glm::vec3(0.0f, 1.0f, 0.0f)		// normal
 	);
+
+	vector<glm::vec3> positions;
+	vector<glm::vec2> texturecoordinates;
+	vector<glm::vec3> normals;
+	vector<unsigned int> positionIndices, textureCoordsIndices, normalIndices;
+
+	Load("Iron_Man/Iron_Man.obj", positions, texturecoordinates, normals, positionIndices, textureCoordsIndices, normalIndices);
 }

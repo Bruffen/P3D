@@ -7,4 +7,4 @@
 
 using namespace std;
 
-void Load(string filename);
+void Load(string filename, vector<glm::vec3> &positions, vector<glm::vec2> &texturecoordinates, vector<glm::vec3> &normals, vector<unsigned int> &positionIndices, vector<unsigned int> &textureCoordsIndices, vector<unsigned int> &normalIndices);
