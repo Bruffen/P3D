@@ -11,6 +11,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+#include "LoadOBJ.h"
 #include <glm\glm.hpp>
 #include <glm\gtc\type_ptr.hpp>
 #include <glm\gtc\matrix_transform.hpp>
@@ -41,6 +42,7 @@ int main(void)
 	glewExperimental = GL_TRUE;
 	glewInit();
 	start();
+	Load("Iron_Man/Iron_Man.obj");
 
 	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT);
