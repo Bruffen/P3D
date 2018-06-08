@@ -42,3 +42,5 @@ typedef struct {
 } ShaderInfo;
 
 GLuint LoadShaders(ShaderInfo*);
+
+
