@@ -81,7 +81,7 @@ void start(void)
 	glBindVertexArray(VAO);
 
 	//criar nomes de VBOs
-	glGenBuffers(3, &Buffers[0]);
+	glGenBuffers(3, Buffers);
 
 	//primeiro VBO com as posicoes
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[0]);
@@ -104,16 +104,16 @@ void start(void)
 	glUseProgram(programa);
 
 	GLint positionsId = glGetProgramResourceLocation(programa, GL_PROGRAM_INPUT, "vPosition");
-	glBindBuffer(GL_ARRAY_BUFFER, Buffers[0]);
 	glVertexAttribPointer(positionsId, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void *)0);
+	glBindBuffer(GL_ARRAY_BUFFER, Buffers[0]);
 	glEnableVertexAttribArray(positionsId);
 
 	glViewport(0, 0, WIDTH, HEIGHT);
 
 	//optimização
 	glEnable(GL_DEPTH_TEST);
-	/*glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);*/
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 }
 
 void draw()
@@ -135,5 +135,5 @@ void draw()
 	// Vincula (torna ativo) o VAO
 	glBindVertexArray(VAO);
 
-	glDrawArrays(GL_TRIANGLES, 0, numVertices);
+	glDrawArrays(GL_TRIANGLES, 0, numVertices / 3);
 }
