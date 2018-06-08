@@ -22,10 +22,11 @@
 #define WIDTH 1280
 #define HEIGHT 720
 
-GLuint VAO, Buffers[3], programa;
-glm::mat4 Model, View, Projection;
-
 void start(void);
+void draw(void);
+
+GLuint VAO, Buffers[3], programa, numVertices;
+glm::mat4 Model, View, Projection;
 
 int main(void)
 {
@@ -46,15 +47,7 @@ int main(void)
 	start();
 
 	while (!glfwWindowShouldClose(window)) {
-		glClear(GL_COLOR_BUFFER_BIT);
-		/*
-		static const GLfloat green[] = {
-			0.1f, 0.6f, 0.0f, 0.0f
-		};
-		glClearBufferfv(GL_COLOR, 0, green);
-		*/
-
-		//display();
+		draw();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -77,26 +70,27 @@ void start(void)
 	vector<glm::vec3> positions;
 	vector<glm::vec2> texturecoordinates;
 	vector<glm::vec3> normals;
-	vector<unsigned int> positionIndices, textureCoordsIndices, normalIndices;
+
 	//load do ficheiro obj para as variáveis
-	Load("Iron_Man/Iron_Man.obj", positions, texturecoordinates, normals, positionIndices, textureCoordsIndices, normalIndices);
+	Load("Iron_Man/Iron_Man.obj", positions, texturecoordinates, normals);
+	numVertices = positions.size();
 
 	//criar nome de VAO e vincular
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 
 	//criar nomes de VBOs
-	glGenBuffers(3, Buffers);
+	glGenBuffers(3, &Buffers[0]);
 
 	//primeiro VBO com as posicoes
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[0]);
-	glBufferStorage(GL_ARRAY_BUFFER, sizeof(positions), &positions[0], 0);
+	glBufferStorage(GL_ARRAY_BUFFER, sizeof(positions), glm::value_ptr(positions[0]), 0);
 	//segundoVBO com as coordenadas de textura
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[1]);
-	glBufferStorage(GL_ARRAY_BUFFER, sizeof(texturecoordinates), &texturecoordinates[0], 0);
+	glBufferStorage(GL_ARRAY_BUFFER, sizeof(texturecoordinates), glm::value_ptr(texturecoordinates[0]), 0);
 	//terceiro VBO com as normais
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[2]);
-	glBufferStorage(GL_ARRAY_BUFFER, sizeof(normals), &normals[0], 0);
+	glBufferStorage(GL_ARRAY_BUFFER, sizeof(normals), glm::value_ptr(normals[0]), 0);
 
 	ShaderInfo shaders[] = {
 		{ GL_VERTEX_SHADER,   "shaders/shader.vert" },
@@ -107,4 +101,37 @@ void start(void)
 	programa = LoadShaders(shaders);
 	if (!programa) exit(EXIT_FAILURE);
 	glUseProgram(programa);
+
+	GLint positionsId = glGetProgramResourceLocation(programa, GL_PROGRAM_INPUT, "vPosition");
+	glBindBuffer(GL_ARRAY_BUFFER, Buffers[0]);
+	glVertexAttribPointer(positionsId, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void *)0);
+	glEnableVertexAttribArray(positionsId);
+
+	glViewport(0, 0, WIDTH, HEIGHT);
+
+	//optimização
+	glEnable(GL_DEPTH_TEST);
+	/*glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);*/
+}
+
+void draw()
+{
+	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+
+	GLint modelId = glGetProgramResourceLocation(programa, GL_UNIFORM, "Model");
+	glProgramUniformMatrix4fv(programa, modelId, 1, GL_FALSE, glm::value_ptr(Model));
+	// Atribui valor ao uniform View
+	GLint viewId = glGetProgramResourceLocation(programa, GL_UNIFORM, "View");
+	glProgramUniformMatrix4fv(programa, viewId, 1, GL_FALSE, glm::value_ptr(View));
+	// Atribui valor ao uniform Projection
+	GLint projectionId = glGetProgramResourceLocation(programa, GL_UNIFORM, "Projection");
+	glProgramUniformMatrix4fv(programa, projectionId, 1, GL_FALSE, glm::value_ptr(Projection));
+
+	// Vincula (torna ativo) o VAO
+	glBindVertexArray(VAO);
+
+	glDrawArrays(GL_TRIANGLES, 0, numVertices);
 }
