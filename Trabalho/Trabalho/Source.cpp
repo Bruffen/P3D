@@ -60,7 +60,7 @@ int main(void)
 
 void start(void)
 {
-	Projection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
+	Projection = glm::perspective(glm::radians(45.0f), 16.0f / 9.0f, 0.1f, 100.0f);
 	View = glm::lookAt(
 		glm::vec3(0.0f, 1.5f, 6.0f),	// posicao
 		glm::vec3(0.0f, 1.5f, 0.0f),	// lookat
@@ -71,9 +71,10 @@ void start(void)
 	vector<glm::vec3> positions;
 	vector<glm::vec2> texturecoordinates;
 	vector<glm::vec3> normals;
+	Material material;
 
 	//load do ficheiro obj para as variáveis
-	Load("Iron_Man/Iron_Man.obj", positions, texturecoordinates, normals);
+	Load("Iron_Man/", "Iron_Man.obj", positions, texturecoordinates, normals, material);
 	numVertices = positions.size();
 
 	//criar nome de VAO e vincular
@@ -103,6 +104,7 @@ void start(void)
 	if (!programa) exit(EXIT_FAILURE);
 	glUseProgram(programa);
 
+	//preencher o VBO com as posições
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[0]);
 	GLint positionsId = glGetProgramResourceLocation(programa, GL_PROGRAM_INPUT, "vPosition");
 	glVertexAttribPointer(positionsId, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);

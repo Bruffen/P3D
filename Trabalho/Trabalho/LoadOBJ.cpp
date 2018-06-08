@@ -1,8 +1,8 @@
 #include "LoadOBJ.h"
 
-void Load(string filename, vector<glm::vec3> &positions, vector<glm::vec2> &texturecoordinates, vector<glm::vec3> &normals)
+void Load(string directory, string filename, vector<glm::vec3> &positions, vector<glm::vec2> &texturecoordinates, vector<glm::vec3> &normals, Material &material)
 {
-	FILE *file = fopen(filename.c_str(), "r");
+	FILE *file = fopen((directory + filename).c_str(), "r");
 
 	if (file != NULL)
 	{
@@ -56,6 +56,57 @@ void Load(string filename, vector<glm::vec3> &positions, vector<glm::vec2> &text
 					normals.push_back(n[nIndex[i] - 1]);
 					//indice -1 porque no ficheiro obj, os indices começam no 1 e não em 0
 				}
+			}
+			else if (strcmp(firstWord, "usemtl") == 0)
+			{
+				string materialName;
+				fscanf(file, "%s\n", &materialName);
+				materialName += ".mtl";
+				LoadMaterial(directory, materialName, material);
+			}
+		}
+	}
+}
+
+void LoadMaterial(string directory, string filename, Material &material)
+{
+	FILE *file = fopen((directory + filename).c_str(), "r");
+
+	if (file != NULL)
+	{
+		while (true)
+		{
+			char firstWord[64];
+			int result = fscanf(file, "%s", firstWord);
+			if (result == EOF)
+				break;
+
+			if (strcmp(firstWord, "Ns") == 0) {
+				fscanf(file, "%f\n", &material.ns);
+			}
+			
+			else if (strcmp(firstWord, "Ka") == 0) {
+				fscanf(file, "%f %f %f\n", &material.ka.r, &material.ka.g, &material.ka.b);
+			}
+
+			else if (strcmp(firstWord, "Kd") == 0) {
+				fscanf(file, "%f %f %f\n", &material.kd.r, &material.kd.g, &material.kd.b);
+			}
+
+			else if (strcmp(firstWord, "Ks") == 0) {
+				fscanf(file, "%f %f %f\n", &material.ks.r, &material.ks.g, &material.ks.b);
+			}
+
+			else if (strcmp(firstWord, "Ni") == 0) {
+				fscanf(file, "%f\n", &material.ni);
+			}
+
+			else if (strcmp(firstWord, "d") == 0) {
+				fscanf(file, "%f\n", &material.d);
+			}
+
+			else if (strcmp(firstWord, "illum") == 0) {
+				fscanf(file, "%f\n", &material.illum);
 			}
 		}
 	}
