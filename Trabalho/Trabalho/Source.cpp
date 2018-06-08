@@ -12,6 +12,7 @@
 #include "stb_image.h"
 
 #include "LoadOBJ.h"
+#include "LoadShaders.h"
 #include <glm\glm.hpp>
 #include <glm\gtc\type_ptr.hpp>
 #include <glm\gtc\matrix_transform.hpp>
@@ -21,7 +22,7 @@
 #define WIDTH 1280
 #define HEIGHT 720
 
-GLuint VAO, Buffers[3];
+GLuint VAO, Buffers[3], programa;
 glm::mat4 Model, View, Projection;
 
 void start(void);
@@ -96,4 +97,14 @@ void start(void)
 	//terceiro VBO com as normais
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[2]);
 	glBufferStorage(GL_ARRAY_BUFFER, sizeof(normals), &normals[0], 0);
+
+	ShaderInfo shaders[] = {
+		{ GL_VERTEX_SHADER,   "shaders/shader.vert" },
+		{ GL_FRAGMENT_SHADER, "shaders/shader.frag" },
+		{ GL_NONE, NULL }
+	};
+
+	programa = LoadShaders(shaders);
+	if (!programa) exit(EXIT_FAILURE);
+	glUseProgram(programa);
 }
