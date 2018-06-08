@@ -27,6 +27,7 @@ void draw(void);
 
 GLuint VAO, Buffers[3], programa, numVertices;
 glm::mat4 Model, View, Projection;
+GLfloat angle = 0.0f;
 
 int main(void)
 {
@@ -120,6 +121,7 @@ void draw()
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClear(GL_DEPTH_BUFFER_BIT);
 
+	Model = glm::rotate(glm::mat4(), angle += 0.02f, glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f)));
 
 	GLint modelId = glGetProgramResourceLocation(programa, GL_UNIFORM, "Model");
 	glProgramUniformMatrix4fv(programa, modelId, 1, GL_FALSE, glm::value_ptr(Model));
