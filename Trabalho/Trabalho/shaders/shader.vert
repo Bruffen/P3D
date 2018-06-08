@@ -8,5 +8,5 @@ in vec3 vPosition;
 
 void main()
 {
-    gl_Position = Projection * View * Model * vec4(vPosition, 1.0f);
+    gl_Position = Projection * View * Model * vec4(vPosition, 1.0);
 }

@@ -27,6 +27,7 @@ void draw(void);
 
 GLuint VAO, Buffers[3], programa, numVertices;
 glm::mat4 Model, View, Projection;
+GLfloat angle = 0.0f;
 
 int main(void)
 {
@@ -61,8 +62,8 @@ void start(void)
 {
 	Projection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
 	View = glm::lookAt(
-		glm::vec3(0.0f, 0.0f, 5.0f),	// posicao
-		glm::vec3(0.0f, 0.0f, 0.0f),	// lookat
+		glm::vec3(0.0f, 1.5f, 6.0f),	// posicao
+		glm::vec3(0.0f, 1.5f, 0.0f),	// lookat
 		glm::vec3(0.0f, 1.0f, 0.0f)		// normal
 	);
 
@@ -80,17 +81,17 @@ void start(void)
 	glBindVertexArray(VAO);
 
 	//criar nomes de VBOs
-	glGenBuffers(3, &Buffers[0]);
+	glGenBuffers(3, Buffers);
 
 	//primeiro VBO com as posicoes
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[0]);
-	glBufferStorage(GL_ARRAY_BUFFER, sizeof(positions), glm::value_ptr(positions[0]), 0);
+	glBufferStorage(GL_ARRAY_BUFFER, positions.size() * sizeof(glm::vec3), &positions[0], 0);
 	//segundoVBO com as coordenadas de textura
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[1]);
-	glBufferStorage(GL_ARRAY_BUFFER, sizeof(texturecoordinates), glm::value_ptr(texturecoordinates[0]), 0);
+	glBufferStorage(GL_ARRAY_BUFFER, texturecoordinates.size() * sizeof(glm::vec2), &texturecoordinates[0], 0);
 	//terceiro VBO com as normais
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[2]);
-	glBufferStorage(GL_ARRAY_BUFFER, sizeof(normals), glm::value_ptr(normals[0]), 0);
+	glBufferStorage(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], 0);
 
 	ShaderInfo shaders[] = {
 		{ GL_VERTEX_SHADER,   "shaders/shader.vert" },
@@ -102,24 +103,25 @@ void start(void)
 	if (!programa) exit(EXIT_FAILURE);
 	glUseProgram(programa);
 
-	GLint positionsId = glGetProgramResourceLocation(programa, GL_PROGRAM_INPUT, "vPosition");
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[0]);
-	glVertexAttribPointer(positionsId, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void *)0);
+	GLint positionsId = glGetProgramResourceLocation(programa, GL_PROGRAM_INPUT, "vPosition");
+	glVertexAttribPointer(positionsId, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
 	glEnableVertexAttribArray(positionsId);
 
 	glViewport(0, 0, WIDTH, HEIGHT);
 
 	//optimização
 	glEnable(GL_DEPTH_TEST);
-	/*glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);*/
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 }
 
 void draw()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
-	glClear(GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
+	//Model = glm::rotate(glm::mat4(), angle += 0.02f, glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f)));
 
 	GLint modelId = glGetProgramResourceLocation(programa, GL_UNIFORM, "Model");
 	glProgramUniformMatrix4fv(programa, modelId, 1, GL_FALSE, glm::value_ptr(Model));
