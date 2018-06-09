@@ -110,29 +110,28 @@ void start(void)
 	if (!programa) exit(EXIT_FAILURE);
 	glUseProgram(programa);
 
-	//preencher o VBO com as posi��es
+	//dar ao shader as informações
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[0]);
 	GLint positionsId = glGetProgramResourceLocation(programa, GL_PROGRAM_INPUT, "vPosition");
-	glVertexAttribPointer(positionsId, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
+	glVertexAttribPointer(positionsId, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(positionsId);
 
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[1]);
 	GLint textureCoordsId = glGetProgramResourceLocation(programa, GL_PROGRAM_INPUT, "vTextureCoords");
-	glVertexAttribPointer(textureCoordsId, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
+	glVertexAttribPointer(textureCoordsId, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(textureCoordsId);
 
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[2]);
 	GLint normalId = glGetProgramResourceLocation(programa, GL_PROGRAM_INPUT, "vNormal");
-	glVertexAttribPointer(normalId, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
+	glVertexAttribPointer(normalId, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(normalId);
 
-	//dar ao shader a textura como uniform
 	GLint textureId = glGetProgramResourceLocation(programa, GL_UNIFORM, "Texture");
 	glProgramUniform1i(programa, textureId, 0 /* Unidade de Textura #0 */);
 
 	glViewport(0, 0, WIDTH, HEIGHT);
 
-	//optimiza��o
+	//optimização
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -193,7 +192,7 @@ void load_texture(string directory, string filename)
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, nChannels == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, imageData);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		// Liberta a imagem da mem�ria do CPU
+		// Liberta a imagem da memória do CPU
 		stbi_image_free(imageData);
 	}
 	else {

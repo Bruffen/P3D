@@ -26,6 +26,8 @@ struct Material{
 
 uniform Material material;
 
+vec4 calcAmbientLight(AmbientLight light);
+
 void main()
 {
 	//Componente emissiva do material.
