@@ -1,8 +1,5 @@
 #include <GLFW\glfw3.h>  
  
-//Variables  
-
-  
 // when scroll wheel or touchpad gesture do this  
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);  
 // update  
