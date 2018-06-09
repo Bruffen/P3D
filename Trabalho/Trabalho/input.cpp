@@ -7,14 +7,15 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    if (key == GLFW_KEY_1 && action == GLFW_PRESS) ;//ambient light
-
-    if (key == GLFW_KEY_2 && action == GLFW_PRESS) ;//directional light
-
-    if (key == GLFW_KEY_3 && action == GLFW_PRESS) ;//point light
-
-    if (key == GLFW_KEY_4 && action == GLFW_PRESS) ;//spot light
-}
+    if (key == GLFW_KEY_1 && action == GLFW_PRESS)//ambient light
+        ambientLightOn = !ambientLightOn;
+    if (key == GLFW_KEY_2 && action == GLFW_PRESS)//directional light
+        dirLightOn = !dirLightOn;
+    if (key == GLFW_KEY_3 && action == GLFW_PRESS)//point light
+        pointLightOn = !pointLightOn;
+    if (key == GLFW_KEY_4 && action == GLFW_PRESS)//spot light
+        spotLightOn = !spotLightOn
+}   
 
 void update(GLFWwindow* window)
 {

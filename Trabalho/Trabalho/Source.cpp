@@ -70,7 +70,7 @@ void start(void)
 		glm::vec3(0.0f, 1.0f, 0.0f)		// normal
 	);
 
-	//criar os arrays para guardar informação dentro da função load
+	//criar os arrays para guardar informaï¿½ï¿½o dentro da funï¿½ï¿½o load
 	vector<glm::vec3> positions;
 	vector<glm::vec2> texturecoordinates;
 	vector<glm::vec3> normals;
@@ -78,7 +78,7 @@ void start(void)
 	string directory = "Iron_Man/";
 	string textureName;
 
-	//load do ficheiro obj para as variáveis
+	//load do ficheiro obj para as variï¿½veis
 	Load(directory, "Iron_Man.obj", positions, texturecoordinates, normals, material, textureName);
 	numVertices = positions.size();
 	load_texture(directory, textureName);
@@ -110,7 +110,7 @@ void start(void)
 	if (!programa) exit(EXIT_FAILURE);
 	glUseProgram(programa);
 
-	//preencher o VBO com as posições
+	//preencher o VBO com as posiï¿½ï¿½es
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[0]);
 	GLint positionsId = glGetProgramResourceLocation(programa, GL_PROGRAM_INPUT, "vPosition");
 	glVertexAttribPointer(positionsId, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
@@ -132,7 +132,7 @@ void start(void)
 
 	glViewport(0, 0, WIDTH, HEIGHT);
 
-	//optimização
+	//optimizaï¿½ï¿½o
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -193,7 +193,7 @@ void load_texture(string directory, string filename)
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, nChannels == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, imageData);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		// Liberta a imagem da memória do CPU
+		// Liberta a imagem da memï¿½ria do CPU
 		stbi_image_free(imageData);
 	}
 	else {
