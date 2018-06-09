@@ -20,6 +20,8 @@
 #include <glm\gtc\matrix_inverse.hpp>
 #include <iostream>
 
+#include "programInput.h"
+
 #define WIDTH 1280
 #define HEIGHT 720
 
@@ -49,10 +51,10 @@ int main(void)
 	glewExperimental = GL_TRUE;
 	glewInit();
 	start();
-
+	inputOnce(window);
 	while (!glfwWindowShouldClose(window)) {
 		draw();
-
+		update(window);
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
@@ -135,6 +137,8 @@ void start(void)
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
+
+
 }
 
 void draw()

@@ -113,11 +113,13 @@
   <ItemGroup>
     <ClCompile Include="LoadOBJ.cpp" />
     <ClCompile Include="LoadShaders.cpp" />
+    <ClCompile Include="programInput.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LoadOBJ.h" />
     <ClInclude Include="LoadShaders.h" />
+    <ClInclude Include="programInput.h" />
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
