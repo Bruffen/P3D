@@ -4,7 +4,7 @@ uniform mat4 Model;
 uniform mat4 View;
 uniform mat4 ModelView;		// View * Model
 
-uniform samplerCube cubeMap;
+uniform sampler2D Texture;
 
 // Estrutura da fonte de luz ambiente global
 struct AmbientLight {
@@ -93,7 +93,7 @@ void main()
 	for(int i=0; i<2; i++)
 		light[i+2] = calcPointLight(pointLight[i]);
 	// Contribui��o da fonte de luz c�nica
-	light[4] = /**/vec4(0.0)/**/;
+	light[4] = calcSpotLight(spotLight);
 
 	// C�lculo da cor final do fragmento.
 	// Com CubeMap
