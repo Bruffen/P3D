@@ -14,7 +14,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_3 && action == GLFW_PRESS)//point light
         pointLightOn = !pointLightOn;
     if (key == GLFW_KEY_4 && action == GLFW_PRESS)//spot light
-        spotLightOn = !spotLightOn
+        spotLightOn = !spotLightOn;
 }   
 
 void update(GLFWwindow* window)
@@ -30,6 +30,7 @@ void update(GLFWwindow* window)
 
     //create the matrix for the rotation
     //angle change rate
+    float xAngle, yAngle;
 }
 
 void inputOnce(GLFWwindow* window)
