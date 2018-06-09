@@ -1,4 +1,9 @@
-#include "input.h"
+#include  <GLFW\glfw3.h>  
+ 
+double _camZoom = 0;
+double _xOffset, _yOffset;
+
+bool pointLightOn = false, dirLightOn = false, ambientLightOn = false, spotLightOn = false;
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
