@@ -41,5 +41,5 @@ struct Material
 	//10	Casts shadows onto invisible surfaces
 };
 
-void Load(string directory, string filename, vector<glm::vec3> &positions, vector<glm::vec2> &texturecoordinates, vector<glm::vec3> &normals, Material &material);
-void LoadMaterial(string directory, string filename, Material &material);
+void Load(string directory, string filename, vector<glm::vec3> &positions, vector<glm::vec2> &texturecoordinates, vector<glm::vec3> &normals, Material &material, string &textureName);
+void LoadMaterial(string directory, string filename, Material &material, string &textureName);

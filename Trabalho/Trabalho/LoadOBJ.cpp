@@ -1,6 +1,6 @@
 #include "LoadOBJ.h"
 
-void Load(string directory, string filename, vector<glm::vec3> &positions, vector<glm::vec2> &texturecoordinates, vector<glm::vec3> &normals, Material &material)
+void Load(string directory, string filename, vector<glm::vec3> &positions, vector<glm::vec2> &texturecoordinates, vector<glm::vec3> &normals, Material &material, string &textureName)
 {
 	FILE *file = fopen((directory + filename).c_str(), "r");
 
@@ -61,16 +61,16 @@ void Load(string directory, string filename, vector<glm::vec3> &positions, vecto
 			{
 				string materialName;
 				fscanf(file, "%s\n", &materialName);
-				materialName += ".mtl";
-				LoadMaterial(directory, materialName, material);
+				strcat(&materialName[0], ".mtl");
+				LoadMaterial(directory, materialName, material, textureName);
 			}
 		}
 	}
 }
 
-void LoadMaterial(string directory, string filename, Material &material)
+void LoadMaterial(string directory, string filename, Material &material, string &textureName)
 {
-	FILE *file = fopen((directory + filename).c_str(), "r");
+	FILE *file = fopen(strcat(&directory[0], &filename[0]), "r");
 
 	if (file != NULL)
 	{
@@ -107,6 +107,10 @@ void LoadMaterial(string directory, string filename, Material &material)
 
 			else if (strcmp(firstWord, "illum") == 0) {
 				fscanf(file, "%f\n", &material.illum);
+			}
+
+			else if (strcmp(firstWord, "map_Kd") == 0) {
+				fscanf(file, "%s\n", &textureName);
 			}
 		}
 	}

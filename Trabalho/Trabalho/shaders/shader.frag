@@ -1,12 +1,12 @@
 #version 440 core
 
-uniform mat4 Model;
-uniform mat4 View;
-uniform mat4 Projection;
+uniform sampler2D Texture;
+
+layout (location = 0) in vec2 fTextureCoords;
 
 layout (location = 0) out vec4 fColor;
 
 void main()
 {
-    fColor = vec4(0.6, 0.8, 0.1, 1.0);
+    fColor = texture(Texture, fTextureCoords);
 }

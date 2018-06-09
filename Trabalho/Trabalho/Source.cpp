@@ -1,6 +1,7 @@
 #pragma comment(lib, "glew32s.lib")
 #pragma comment(lib, "glfw3.lib")
 #pragma comment(lib, "opengl32.lib")
+#define _CRT_SECURE_NO_WARNINGS
 
 #define GLEW_STATIC
 #include <GL\glew.h>
@@ -24,6 +25,7 @@
 
 void start(void);
 void draw(void);
+void load_texture(string directory, string filename);
 
 GLuint VAO, Buffers[3], programa, numVertices;
 glm::mat4 Model, View, Projection;
@@ -72,10 +74,13 @@ void start(void)
 	vector<glm::vec2> texturecoordinates;
 	vector<glm::vec3> normals;
 	Material material;
+	string directory = "Iron_Man/";
+	string textureName;
 
 	//load do ficheiro obj para as variáveis
-	Load("Iron_Man/", "Iron_Man.obj", positions, texturecoordinates, normals, material);
+	Load(directory, "Iron_Man.obj", positions, texturecoordinates, normals, material, textureName);
 	numVertices = positions.size();
+	load_texture(directory, textureName);
 
 	//criar nome de VAO e vincular
 	glGenVertexArrays(1, &VAO);
@@ -110,6 +115,15 @@ void start(void)
 	glVertexAttribPointer(positionsId, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
 	glEnableVertexAttribArray(positionsId);
 
+	glBindBuffer(GL_ARRAY_BUFFER, Buffers[1]);
+	GLint textureCoordsId = glGetProgramResourceLocation(programa, GL_PROGRAM_INPUT, "vTextureCoords");
+	glVertexAttribPointer(textureCoordsId, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
+	glEnableVertexAttribArray(textureCoordsId);
+
+	//dar ao shader a textura como uniform
+	GLint textureId = glGetProgramResourceLocation(programa, GL_UNIFORM, "Texture");
+	glProgramUniform1i(programa, textureId, 0 /* Unidade de Textura #0 */);
+
 	glViewport(0, 0, WIDTH, HEIGHT);
 
 	//optimização
@@ -122,9 +136,9 @@ void draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
 	//Model = glm::rotate(glm::mat4(), angle += 0.02f, glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f)));
 
+	// Atribui valor ao uniform Model
 	GLint modelId = glGetProgramResourceLocation(programa, GL_UNIFORM, "Model");
 	glProgramUniformMatrix4fv(programa, modelId, 1, GL_FALSE, glm::value_ptr(Model));
 	// Atribui valor ao uniform View
@@ -138,4 +152,28 @@ void draw()
 	glBindVertexArray(VAO);
 
 	glDrawArrays(GL_TRIANGLES, 0, numVertices);
+}
+
+void load_texture(string directory, string filename)
+{
+	GLuint texture = 0;
+	glGenBuffers(1, &texture);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	stbi_set_flip_vertically_on_load(true);
+
+	int width, height, nChannels;
+	unsigned char *imageData = stbi_load(strcat(&directory[0], &filename[0]), &width, &height, &nChannels, 0);
+	if (imageData) {
+		// Carrega os dados da imagem para o Objeto de Textura vinculado ao target GL_TEXTURE_2D da Unidade de Textura ativa.
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, nChannels == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, imageData);
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		// Liberta a imagem da memória do CPU
+		stbi_image_free(imageData);
+	}
+	else {
+		cout << "Error loading texture!" << endl;
+	}
 }
