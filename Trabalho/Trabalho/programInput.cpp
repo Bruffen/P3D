@@ -9,8 +9,10 @@
 int *pointLightOn, *dirLightOn, *ambientLightOn, *spotLightOn;
 
 double _camZoom = 0;
-double _xOffset, _yOffset;
-float angleFlow = 0;
+double _xOffset, _yOffset, lastX, lastY;
+float angleFlow = 0.02f;
+float xAngle, yAngle;
+float speed = 0.002f;
 
 void referenceLights(int *ambientLight, int *dirLight, int *pointLight, int *spotLight)
 {
@@ -22,57 +24,40 @@ void referenceLights(int *ambientLight, int *dirLight, int *pointLight, int *spo
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	if(_camZoom >= 0 && _camZoom <= 135)
-		_camZoom += yoffset;
+	if (_camZoom < -40)
+		_camZoom = -40;
+	else if (_camZoom > 90)
+		_camZoom = 90;
+	if(_camZoom >= -40 && _camZoom <= 90)
+		_camZoom -= yoffset;
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	if (key == GLFW_KEY_1 && action == GLFW_PRESS)//ambient light
-	{
 		*ambientLightOn = (*ambientLightOn == 0) ? 1 : 0;
-		//printf("KEY1 = %d\n", *ambientLightOn);
-	}
 	if (key == GLFW_KEY_2 && action == GLFW_PRESS)//directional light
-	{
 		*dirLightOn = (*dirLightOn == 0) ? 1 : 0;
-		//printf("KEY2 = %d\n", *dirLightOn);
-	}
 	if (key == GLFW_KEY_3 && action == GLFW_PRESS)//point light
-	{
 		*pointLightOn = (*pointLightOn == 0) ? 1 : 0;
-		//printf("KEY3 = %d\n", pointLightOn);
-	}
     if (key == GLFW_KEY_4 && action == GLFW_PRESS)//spot light
-	{
 		*spotLightOn = (*spotLightOn == 0) ? 1 : 0;
-		//printf("KEY4 = %d\n", *spotLightOn);
-	}
 }   
 
 void update(GLFWwindow* window)
 {
+	lastX = _xOffset;
+	lastY = _yOffset;
     glfwGetCursorPos(window, &_xOffset, &_yOffset);
 
-    int w, h;
-    glfwGetWindowSize(window, &w, &h);
-    double cx = w/2, cy = h/2;
-
-    //changed the coordinates so middle is 0,0
-    _xOffset = _xOffset - cx;
-    _yOffset = _yOffset - cy;
-
-	//printf("%lf, %lf\n", _xOffset, _yOffset);
-
-    //create the matrix for the rotation
-    //angle change rate
-    float xAngle, yAngle;
+	xAngle = (lastX - _xOffset) * speed;
+	yAngle = (lastY - _yOffset) * speed;
 }
 
 void inputOnce(GLFWwindow* window)
 {
     glfwSetScrollCallback(window, scroll_callback); // scroll wheel
-    glfwSetKeyCallback(window, key_callback); // keyboard
+    glfwSetKeyCallback(window, key_callback);		// keyboard
 }
 
 glm::mat4 updateZoom()
@@ -81,11 +66,8 @@ glm::mat4 updateZoom()
     return newProjection;
 }
 
-glm::mat4 updateRotation(glm::mat4 matrix)
+void updateRotation(glm::mat4 &model, glm::mat4 &view)
 {
-	glm::mat4 newView;
-	newView = glm::rotate(matrix, angleFlow += 0.02f, glm::normalize(
-        glm::vec3(0, _xOffset, _yOffset))
-    );
-	return newView;
+	model *= glm::rotate(glm::mat4(), xAngle + angleFlow, glm::normalize(glm::vec3(0, 1.0, 0)));
+	view *= glm::rotate(glm::mat4(),  yAngle, glm::normalize(glm::vec3(1.0, 0.0, 0.0)));
 }
