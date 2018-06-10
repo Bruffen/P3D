@@ -159,7 +159,7 @@ vec4 calcPointLight(PointLight light)
 
 vec4 calcSpotLight(SpotLight light) 
 { 
-    if (pointLightOn == 0)
+    if (spotLightOn == 0)
     return vec4(0.0);
 
   float intensity;
@@ -189,13 +189,13 @@ vec4 calcSpotLight(SpotLight light)
   //float epsilon =  (light.spotCutoff - light.spotExponent);
   //float intensity  = clamp((theta - light.spotCutoff) / epsilon, 0.0, 1.0);
   float theta = dot(L, normalize(-light.spotDirection));
-  if(theta < light.spotCutoff)
+  if (theta < light.spotCutoff)
   {
     intensity = 0.0f;
   }
   else 
   {
-    float spotValue = smoothstep(light.spotCutoff,light.spotCutoff - 0.002f,theta);
+    float spotValue = smoothstep(light.spotCutoff,light.spotCutoff - 2.0f,theta);
     intensity = pow(spotValue, light.spotExponent);
   }
   attenuation *= intensity;
