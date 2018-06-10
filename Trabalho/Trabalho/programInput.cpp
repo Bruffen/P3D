@@ -6,7 +6,7 @@
 #include <glm\gtc\matrix_inverse.hpp>
 #include <iostream>
 
-int *pointLightOn, *dirLightOn, *ambientLightOn, *spotLightOn;
+int *pointLightOn, *dirLightOn, *ambientLightOn, *spotLightOn, *shouldClose;
 
 double _camZoom = 0;
 double _xOffset, _yOffset, lastX, lastY;
@@ -42,6 +42,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		*pointLightOn = (*pointLightOn == 0) ? 1 : 0;
     if (key == GLFW_KEY_4 && action == GLFW_PRESS)//spot light
 		*spotLightOn = (*spotLightOn == 0) ? 1 : 0;
+
+    if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+       glfwSetWindowShouldClose(window, 1);
 }   
 
 void update(GLFWwindow* window)
