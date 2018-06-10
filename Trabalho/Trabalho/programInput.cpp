@@ -6,7 +6,7 @@
 #include <glm\gtc\matrix_inverse.hpp>
 #include <iostream>
 
-int *pointLightOn, *dirLightOn, *ambientLightOn, *spotLightOn, *shouldClose;
+int *pointLightOn, *dirLightOn, *ambientLightOn, *spotLightOn;
 
 double _camZoom = 0;
 double _xOffset, _yOffset, lastX, lastY;

@@ -189,7 +189,7 @@ vec4 calcSpotLight(SpotLight light)
   //float epsilon =  (light.spotCutoff - light.spotExponent);
   //float intensity  = clamp((theta - light.spotCutoff) / epsilon, 0.0, 1.0);
   float theta = dot(L, normalize(-light.spotDirection));
-  if (theta < light.spotCutoff)
+  if (theta > light.spotCutoff)
   {
     intensity = 0.0f;
   }
