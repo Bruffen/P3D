@@ -32,6 +32,7 @@ GLuint VAO, Buffers[3], programa, numVertices;
 glm::mat4 Model, View, Projection;
 glm::mat3 NormalMatrix;
 GLfloat angle = 0.0f;
+int pointLightOn = 1, dirLightOn = 1, ambientLightOn = 1, spotLightOn = 1;
 
 int main(void)
 {
@@ -83,6 +84,8 @@ void start(void)
 	Load(directory, "Iron_Man.obj", positions, texturecoordinates, normals, material, textureName);
 	numVertices = positions.size();
 	load_texture(directory, textureName);
+
+	referenceLights(&ambientLightOn, &dirLightOn, &pointLightOn, &spotLightOn);
 
 	//criar nome de VAO e vincular
 	glGenVertexArrays(1, &VAO);
@@ -140,7 +143,7 @@ void start(void)
 	glProgramUniform3fv(programa, glGetProgramResourceLocation(programa, GL_UNIFORM, "directionalLight.specular"), 1, glm::value_ptr(glm::vec3(1.0, 1.0, 1.0)));
 
 	// Fonte de luz pontual
-	glProgramUniform3fv(programa, glGetProgramResourceLocation(programa, GL_UNIFORM, "pointLight.position"), 1, glm::value_ptr(glm::vec3(-2.0, 2.0, 5.0)));
+	glProgramUniform3fv(programa, glGetProgramResourceLocation(programa, GL_UNIFORM, "pointLight.position"), 1, glm::value_ptr(glm::vec3(6.0, 1.5, 6.0)));
 	glProgramUniform3fv(programa, glGetProgramResourceLocation(programa, GL_UNIFORM, "pointLight.ambient"), 1, glm::value_ptr(glm::vec3(0.1, 0.1, 0.1)));
 	glProgramUniform3fv(programa, glGetProgramResourceLocation(programa, GL_UNIFORM, "pointLight.diffuse"), 1, glm::value_ptr(glm::vec3(1.0, 1.0, 1.0)));
 	glProgramUniform3fv(programa, glGetProgramResourceLocation(programa, GL_UNIFORM, "pointLight.specular"), 1, glm::value_ptr(glm::vec3(1.0, 1.0, 1.0)));
@@ -189,7 +192,7 @@ void draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	Projection = updateZoom();
-	Model = updateRotation();
+	//Model = updateRotation(Model);
 
 	//Model = glm::rotate(glm::mat4(), angle += 0.02f, glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f)));
 	glm::mat4 ModelView = View * Model;

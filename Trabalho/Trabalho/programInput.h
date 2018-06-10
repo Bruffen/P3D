@@ -1,14 +1,7 @@
 #include <GLFW\glfw3.h>
+#include <glm\glm.hpp>
 
-
-#ifndef Variables
-#define Variables
-int pointLightOn = false, dirLightOn = false, ambientLightOn = false, spotLightOn = false;
-#endif
-
-
-#ifndef Functions
-#define Functions
+void referenceLights(int *ambientLight, int *dirLight, int *pointLight, int *spotLight);
 // when scroll wheel or touchpad gesture do this  
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);  
 // update  
@@ -19,4 +12,3 @@ void inputOnce(GLFWwindow* window);
 glm::mat4 updateZoom();
 //updates de rotation
 glm::mat4 updateRotation(glm::mat4 matrix);
-#endif

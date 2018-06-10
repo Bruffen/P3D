@@ -84,9 +84,8 @@ void main()
   //Componente emissiva do material.
   vec4 emissive = vec4(material.emissive, 1.0);
  
-  vec4 light;
   // Iluminacao
-  /*vec4 light[4];
+  vec4 light[4];
   // Fonte de luz ambiente
   light[0] = calcAmbientLight(ambientLight);
   // Fonte de Luz Direcional
@@ -94,17 +93,15 @@ void main()
   //Fonte de Luz Pontual
   light[2] = calcPointLight(pointLight);
   //Fonte de Luz Pontual
-  light[3] = calcSpotLight(spotLight);*/
-  light = calcSpotLight(spotLight);
+  light[3] = calcSpotLight(spotLight);
   
-  fColor = (emissive + light) * texture(Texture, fTextureCoords);
-  //fColor = (emissive + light[0] + light[1] + light[2] + light[3]) * texture(Texture, fTextureCoords);
+  fColor = (emissive + light[0] + light[1] + light[2] + light[3]) * texture(Texture, fTextureCoords);
 
 }
 
 vec4 calcAmbientLight(AmbientLight light) 
 {
-  if (!ambientLightOn)
+  if (ambientLightOn == 0)
     return vec4(0.0);
   vec4 ambient = vec4(material.ambient * light.ambient, 1.0);
   return ambient;
@@ -112,7 +109,7 @@ vec4 calcAmbientLight(AmbientLight light)
 
 vec4 calcDirectionalLight(DirectionalLight light) 
 {
-  if (!directionalLightOn)
+  if (directionalLightOn == 0)
     return vec4(0.0);
   // Ambiente
   vec4 ambient = vec4(material.ambient * light.ambient, 1.0);
@@ -135,7 +132,7 @@ vec4 calcDirectionalLight(DirectionalLight light)
 
 vec4 calcPointLight(PointLight light)
 {
-  if (!pointLightOn)
+  if (pointLightOn == 0)
     return vec4(0.0);
   // Ambiente
   vec4 ambient = vec4(material.ambient * light.ambient, 1.0);
@@ -193,7 +190,7 @@ vec4 calcPointLight(PointLight light)
 }*/
 
 vec4 calcSpotLight(SpotLight light){
-  if (!spotLightOn)
+  if (spotLightOn == 0)
     return vec4(0.0);
   //Ambient
   vec4 ambient = vec4(material.ambient * light.ambient, 1.0);

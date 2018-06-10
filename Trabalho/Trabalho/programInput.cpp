@@ -1,14 +1,24 @@
 #include "programInput.h"
-#include <GLFW\glfw3.h>  
+#include <GLFW\glfw3.h>
 #include <glm\glm.hpp>
 #include <glm\gtc\type_ptr.hpp>
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm\gtc\matrix_inverse.hpp>
 #include <iostream>
 
+int *pointLightOn, *dirLightOn, *ambientLightOn, *spotLightOn;
+
 double _camZoom = 0;
 double _xOffset, _yOffset;
 float angleFlow = 0;
+
+void referenceLights(int *ambientLight, int *dirLight, int *pointLight, int *spotLight)
+{
+	ambientLightOn = ambientLight;
+	dirLightOn = dirLight;
+	pointLightOn = pointLight;
+	spotLightOn = spotLight;
+}
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
@@ -19,13 +29,25 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	if (key == GLFW_KEY_1 && action == GLFW_PRESS)//ambient light
-		ambientLightOn = (ambientLightOn == 0) ? 1 : 0;
+	{
+		*ambientLightOn = (*ambientLightOn == 0) ? 1 : 0;
+		//printf("KEY1 = %d\n", *ambientLightOn);
+	}
 	if (key == GLFW_KEY_2 && action == GLFW_PRESS)//directional light
-		dirLightOn = (dirLightOn == 0) ? 1 : 0;
+	{
+		*dirLightOn = (*dirLightOn == 0) ? 1 : 0;
+		//printf("KEY2 = %d\n", *dirLightOn);
+	}
 	if (key == GLFW_KEY_3 && action == GLFW_PRESS)//point light
-		pointLightOn = (pointLightOn == 0) ? 1 : 0;
+	{
+		*pointLightOn = (*pointLightOn == 0) ? 1 : 0;
+		//printf("KEY3 = %d\n", pointLightOn);
+	}
     if (key == GLFW_KEY_4 && action == GLFW_PRESS)//spot light
-        spotLightOn = (spotLightOn == 0) ? 1 : 0;
+	{
+		*spotLightOn = (*spotLightOn == 0) ? 1 : 0;
+		//printf("KEY4 = %d\n", *spotLightOn);
+	}
 }   
 
 void update(GLFWwindow* window)
@@ -40,7 +62,7 @@ void update(GLFWwindow* window)
     _xOffset = _xOffset - cx;
     _yOffset = _yOffset - cy;
 
-	printf("%lf, %lf\n", _xOffset, _yOffset);
+	//printf("%lf, %lf\n", _xOffset, _yOffset);
 
     //create the matrix for the rotation
     //angle change rate
