@@ -159,7 +159,11 @@ vec4 calcPointLight(PointLight light)
 
 vec4 calcSpotLight(SpotLight light) 
 { 
+    if (pointLightOn == 0)
+    return vec4(0.0);
+
   float intensity;
+  
   //Ambient
   vec4 ambient = vec4(material.ambient * light.ambient, 1.0);
  
