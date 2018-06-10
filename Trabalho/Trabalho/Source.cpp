@@ -187,7 +187,11 @@ void start(void)
 
 void draw()
 {
+	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	Projection = updateZoom();
+	View = updateRotation();
 
 	//Model = glm::rotate(glm::mat4(), angle += 0.02f, glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f)));
 	glm::mat4 ModelView = View * Model;

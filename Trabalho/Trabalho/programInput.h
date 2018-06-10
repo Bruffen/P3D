@@ -6,3 +6,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void update(GLFWwindow* window);  
 // Things that are only needed to do once  
 void inputOnce(GLFWwindow* window);
+//updates the zoom
+glm::mat4 updateZoom();
+
+glm::mat4 updateRotation();
