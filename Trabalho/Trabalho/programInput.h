@@ -11,4 +11,4 @@ void inputOnce(GLFWwindow* window);
 //updates the zoom
 glm::mat4 updateZoom();
 
-glm::mat4 updateRotation();
+glm::mat4 updateRotation(glm::mat4 matrix);

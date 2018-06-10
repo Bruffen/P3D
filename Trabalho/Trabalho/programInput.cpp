@@ -12,7 +12,8 @@ float angleFlow = 0;
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-    _camZoom += yoffset;
+	if(_camZoom >= 0 && _camZoom <= 135)
+		_camZoom += yoffset;
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -39,6 +40,8 @@ void update(GLFWwindow* window)
     _xOffset = _xOffset - cx;
     _yOffset = _yOffset - cy;
 
+	printf("%lf, %lf\n", _xOffset, _yOffset);
+
     //create the matrix for the rotation
     //angle change rate
     float xAngle, yAngle;
@@ -53,13 +56,14 @@ void inputOnce(GLFWwindow* window)
 glm::mat4 updateZoom()
 {
     glm::mat4 newProjection = glm::perspective(glm::radians(45.0f + (float)_camZoom), 16.0f/9.0f, 0.1f, 100.0f); 
-    printf("a");
     return newProjection;
 }
 
-glm::mat4 updateRotation()
+glm::mat4 updateRotation(glm::mat4 matrix)
 {
-    glm::mat4 newView = glm::rotate(glm::mat4(), angleFlow += 0.02f, glm::normalize(glm::vec3(_xOffset, _yOffset, 0)));
-    printf("b");
-    return newView;
+	glm::mat4 newView;
+	newView = glm::rotate(matrix, angleFlow += 0.02f, glm::normalize(
+        glm::vec3(0, _xOffset, _yOffset))
+    );
+	return newView;
 }
