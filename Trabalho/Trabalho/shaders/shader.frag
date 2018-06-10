@@ -2,6 +2,10 @@
 
 uniform mat4 View;
 uniform sampler2D Texture;
+uniform int ambientLightOn;
+uniform int directionalLightOn;
+uniform int pointLightOn;
+uniform int spotLightOn;
 
 layout (location = 0) in vec3 fPositionEyeSpace;
 layout (location = 1) in vec2 fTextureCoords;
@@ -100,12 +104,16 @@ void main()
 
 vec4 calcAmbientLight(AmbientLight light) 
 {
+  if (!ambientLightOn)
+    return vec4(0.0);
   vec4 ambient = vec4(material.ambient * light.ambient, 1.0);
   return ambient;
 }
 
 vec4 calcDirectionalLight(DirectionalLight light) 
 {
+  if (!directionalLightOn)
+    return vec4(0.0);
   // Ambiente
   vec4 ambient = vec4(material.ambient * light.ambient, 1.0);
  
@@ -127,6 +135,8 @@ vec4 calcDirectionalLight(DirectionalLight light)
 
 vec4 calcPointLight(PointLight light)
 {
+  if (!pointLightOn)
+    return vec4(0.0);
   // Ambiente
   vec4 ambient = vec4(material.ambient * light.ambient, 1.0);
 
@@ -183,7 +193,9 @@ vec4 calcPointLight(PointLight light)
 }*/
 
 vec4 calcSpotLight(SpotLight light){
-    //Ambient
+  if (!spotLightOn)
+    return vec4(0.0);
+  //Ambient
   vec4 ambient = vec4(material.ambient * light.ambient, 1.0);
 
   float intensity = 0.0;

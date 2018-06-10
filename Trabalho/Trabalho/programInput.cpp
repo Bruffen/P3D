@@ -1,3 +1,4 @@
+#include "programInput.h"
 #include <GLFW\glfw3.h>  
 #include <glm\glm.hpp>
 #include <glm\gtc\type_ptr.hpp>
@@ -9,8 +10,6 @@ double _camZoom = 0;
 double _xOffset, _yOffset;
 float angleFlow = 0;
 
-bool pointLightOn = false, dirLightOn = false, ambientLightOn = false, spotLightOn = false;
-
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     _camZoom += yoffset;
@@ -18,14 +17,14 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    if (key == GLFW_KEY_1 && action == GLFW_PRESS)//ambient light
-        ambientLightOn = !ambientLightOn;
-    if (key == GLFW_KEY_2 && action == GLFW_PRESS)//directional light
-        dirLightOn = !dirLightOn;
-    if (key == GLFW_KEY_3 && action == GLFW_PRESS)//point light
-        pointLightOn = !pointLightOn;
+	if (key == GLFW_KEY_1 && action == GLFW_PRESS)//ambient light
+		ambientLightOn = (ambientLightOn == 0) ? 1 : 0;
+	if (key == GLFW_KEY_2 && action == GLFW_PRESS)//directional light
+		dirLightOn = (dirLightOn == 0) ? 1 : 0;
+	if (key == GLFW_KEY_3 && action == GLFW_PRESS)//point light
+		pointLightOn = (pointLightOn == 0) ? 1 : 0;
     if (key == GLFW_KEY_4 && action == GLFW_PRESS)//spot light
-        spotLightOn = !spotLightOn;
+        spotLightOn = (spotLightOn == 0) ? 1 : 0;
 }   
 
 void update(GLFWwindow* window)
@@ -43,9 +42,6 @@ void update(GLFWwindow* window)
     //create the matrix for the rotation
     //angle change rate
     float xAngle, yAngle;
-
-    
-
 }
 
 void inputOnce(GLFWwindow* window)

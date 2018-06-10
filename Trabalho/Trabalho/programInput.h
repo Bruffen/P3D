@@ -1,5 +1,7 @@
-#include <GLFW\glfw3.h>  
- 
+#include <GLFW\glfw3.h>
+
+int pointLightOn = false, dirLightOn = false, ambientLightOn = false, spotLightOn = false;
+
 // when scroll wheel or touchpad gesture do this  
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);  
 // update  
