@@ -157,8 +157,9 @@ vec4 calcPointLight(PointLight light)
   return (attenuation * (ambient + diffuse + specular)); 
 }
 
-/*vec4 calcSpotLight(SpotLight light) 
+vec4 calcSpotLight(SpotLight light) 
 { 
+  float intensity;
   //Ambient
   vec4 ambient = vec4(material.ambient * light.ambient, 1.0);
  
@@ -175,46 +176,25 @@ vec4 calcPointLight(PointLight light)
   float RdotV = max(dot(R, V), 0.0);
   vec4 specular = pow(RdotV, material.shininess) * vec4(light.specular * material.specular, 1.0);
  
-  //SpotLight
-  float theta = dot(L, normalize(-light.spotDirection));
-  float epsilon =  (light.spotCutoff - light.spotExponent);
-  float intensity  = clamp((theta - light.spotCutoff) / epsilon, 0.0, 1.0);
-  diffuse *=intensity;
-  specular *= intensity;
- 
   // attenuation
   float dist = length(mat3(View) * light.position - fPositionEyeSpace);  // C�lculo da dist�ncia entre o ponto de luz e o v�rtice
   float attenuation = 1.0 / (light.constant + light.linear * dist + light.quadratic * (dist * dist));
- 
+
+  //SpotLight
+  //float theta = dot(L, normalize(-light.spotDirection));
+  //float epsilon =  (light.spotCutoff - light.spotExponent);
+  //float intensity  = clamp((theta - light.spotCutoff) / epsilon, 0.0, 1.0);
+  float theta = dot(L, normalize(-light.spotDirection));
+  if(theta < light.spotCutoff)
+  {
+    intensity = 0.0f;
+  }
+  else 
+  {
+    float spotValue = smoothstep(light.spotCutoff,light.spotCutoff - 0.002f,theta);
+    intensity = pow(spotValue, light.spotExponent);
+  }
+  attenuation *= intensity;
+
   return (attenuation * (ambient + diffuse + specular));
-}*/
-
-vec4 calcSpotLight(SpotLight light){
-  if (spotLightOn == 0)
-    return vec4(0.0);
-  //Ambient
-  vec4 ambient = vec4(material.ambient * light.ambient, 1.0);
-
-  float intensity = 0.0;
-  vec4 spec = vec4(0.0);
- 
-    vec3 lightPositionEyeSpace = (View * vec4(light.position, 1.0)).xyz;
-    vec3 ld = normalize(lightPositionEyeSpace - fPositionEyeSpace);
-    vec3 sd = normalize(vec3(-light.spotDirection));  
-
-    vec3 n = normalize(fNormalEyeSpace);
-    intensity = max(dot(n,ld), 0.0);
-    vec4 diffuse = vec4(material.diffuse * light.diffuse, 1.0) * intensity;
-    
-    // inside the cone?
-    if (dot(sd,ld) > light.spotCutoff) {
-        if (intensity > 0.0) {
-            vec3 eye = normalize(fPositionEyeSpace);
-            vec3 h = normalize(ld + eye);
-            float intSpec = max(dot(h,n), 0.0);
-            vec4 spec = vec4(light.specular * material.specular, 1.0) * pow(intSpec, material.shininess);
-        }
-    }
- 
-    return max(intensity * diffuse + spec, ambient);
 }
